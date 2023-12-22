@@ -6,7 +6,7 @@ for (i = 2; i < num; ++i)
 {
 if (num % i == 0)
 {
-printf("%lu=%lu*%lu\n", num, i, (num / i));
+printf("%lu=%lu*%lu\n", num, (num / i), i);
 return;
 }
 }
@@ -16,27 +16,28 @@ return;
 
 int main(int argc, char *argv[])
 {
-unsigned long int num, fd, i;
-char ch;
-char buf[20];
-char *buffer;
-buffer = buf;
-fd = open(argv[1], O_RDONLY);
-num = 1;
-while(num != 0)
-{
-ch = 'a';
-i = 0;
-while(ch != '\n')
-{
-read(fd, &ch, 1);
-buf[i] = ch;
-++i;
-}
-buf[i - 1] = '\0';
-num = atoi(buffer);
-factors(num);
-}
-close(fd);
+	FILE *fptr;
+	unsigned long int count;
+	unsigned long int line;
+	unsigned long int num;
+	char *buffer = NULL;
+
+
+	if (argc != 2)
+	{
+		fprintf(stderr, "Usage: factor <filename>\n");
+		exit(EXIT_FAILURE);
+	}
+	fptr = fopen(argv[1], "r");
+	if (fptr == NULL)
+	{
+		fprintf(stderr, "Error: can't open file %s\n", argv[1]);
+		exit(EXIT_FAILURE);
+	}
+	while((line = getline(&buffer, &count, fptr)) != -1)
+	{
+		num = atoi(buffer);
+		factors(num);
+	}
 return (0);
 }
