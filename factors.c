@@ -38,6 +38,9 @@ int main(int argc, char *argv[])
 	{
 		num = atoi(buffer);
 		factors(num);
+		free(buffer);
+		buffer = NULL;
 	}
+	free(buffer);
 return (0);
 }
